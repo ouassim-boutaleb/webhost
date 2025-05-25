@@ -1,0 +1,15 @@
+[build]
+    publish = "build"
+    command = "npm install --legacy-peer-deps && npm run build"
+
+[dev]
+    command = "npm start"
+    port = 3001
+
+[context.production.environment]
+    NODE_ENV = "production"
+
+[[redirects]]
+    from = "/*"
+    to = "/index.html"
+    status = 200
