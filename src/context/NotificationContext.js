@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import addNotification from "react-push-notification";
+
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NotificationContext = createContext();
 
@@ -28,16 +30,7 @@ export const NotificationProvider = ({ children }) => {
     const handleNewOrder = (data) => {
       
       if (Notification.permission === "granted") {
-        addNotification({
-          title: "New Order",
-          message: `You have a new order: ${data.message}`,
-          duration: 10000,
-          
-          onClick: () => {
-            
-          },
-          native: true,
-        });
+        
       }
 
       console.log("Notification received: ", data);
@@ -47,18 +40,15 @@ export const NotificationProvider = ({ children }) => {
 
     const handleLowStock = (data)=> {
       if (Notification.permission === "granted") {
-        addNotification({
-          title: "Low Stock",
-          message: `You have a new order: ${data.message}`,
-          duration: 10000,
-          
-          onClick: () => {
-            
-            window.location.href = '/dashboard/notifications'
-            console.log('redirect')
-          },
-          native: true,
+        const notification = new Notification("Low Stock Alert", {
+          body: `Product ${data.productName} is running low on stock.`,
+          icon: "/path/to/icon.png" // Replace with your icon path
         });
+
+        notification.onclick = () => {
+          navigate("/products");
+        };
+
       }
 
       console.log("Notification received: ", data);
